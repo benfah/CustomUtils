@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>CustomUtils</groupId>
 	<artifactId>CustomUtils</artifactId>
-	<version>a0.1.2</version>
+	<version>a0.1.4</version>
 	<name>CustomUtilsMaven</name>
 	<repositories>
 

@@ -158,4 +158,9 @@ public class Utils
 		f.setAccessible(true);
 		return f;
 	}
+	
+	public static void printInitText()
+	{
+		
+	}
 }

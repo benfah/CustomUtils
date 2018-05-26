@@ -3,6 +3,11 @@ package me.benfah.cu.cmd;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.benfah.cu.cmd.impl.IBlockCommand;
+import me.benfah.cu.cmd.impl.IItemCommand;
+import me.benfah.cu.cmd.impl.IReloadCommand;
+import me.benfah.cu.cmd.impl.IRepackageCommand;
+
 public class CommandRegistry
 {
 	private static List<ISubCommand> subCommands = new ArrayList<>();

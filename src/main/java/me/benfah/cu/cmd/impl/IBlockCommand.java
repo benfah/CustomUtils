@@ -1,4 +1,4 @@
-package me.benfah.cu.cmd;
+package me.benfah.cu.cmd.impl;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -6,28 +6,29 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
-import me.benfah.cu.api.CustomItem;
+import me.benfah.cu.api.CustomBlock;
 import me.benfah.cu.api.CustomRegistry;
+import me.benfah.cu.cmd.ISubCommand;
 
-public class IItemCommand implements ISubCommand
+public class IBlockCommand implements ISubCommand
 {
 
 	@Override
 	public String commandName()
 	{
-		return "item";
+		return "block";
 	}
 
 	@Override
 	public String[] argumentNames()
 	{
-		return new String[] { "{ITEM_ID}" };
+		return new String[] { "{BLOCK_ID}" };
 	}
 
 	@Override
-	public String description(
-			) {
-		return "Gives the player the specific custom item.";
+	public String description()
+	{
+		return "Gives the player the specific custom block.";
 	}
 
 	@Override
@@ -40,17 +41,19 @@ public class IItemCommand implements ISubCommand
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
 	{
 		Player p = (Player) sender;
-		for (CustomItem ci : CustomRegistry.CUSTOM_ITEM_REGISTRY)
+		if(args[0].equalsIgnoreCase("block"))
 		{
-			if (args[1].equals(ci.getName()))
+			for(CustomBlock cb : CustomRegistry.CUSTOM_BLOCK_REGISTRY)
 			{
-				if (p.hasPermission(new Permission("cu.item." + ci.getName(), PermissionDefault.OP)))
-					p.getInventory().addItem(ci.getItem());
-				else
+				if(args[1].equals(cb.getName()))
+				{
+					if(p.hasPermission(new Permission("cu.block." + cb.getName(), PermissionDefault.OP)))
+					p.getInventory().addItem(cb.getBlockItem());
+					else
 					p.sendMessage("No permission!");
+				}
 			}
 		}
-
 		return false;
 	}
 

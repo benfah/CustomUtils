@@ -150,6 +150,16 @@ public class CustomGUI extends CustomBase
 		return name;
 	}
 
+
+
+
+
+
+	public String getPathToModel2()
+	{
+		return pathToModel2;
+	}
+
 	
 	
 }

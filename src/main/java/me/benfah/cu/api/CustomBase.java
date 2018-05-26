@@ -18,6 +18,9 @@ public class CustomBase
 
 	
 	protected String pathToModel1;
+	
+
+
 	protected Material baseMaterial;
 
 	
@@ -40,5 +43,10 @@ public class CustomBase
 	public Material getBaseMaterial()
 	{
 		return baseMaterial;
+	}
+	
+	public String getPathToModel1()
+	{
+		return pathToModel1;
 	}
 }

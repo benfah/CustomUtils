@@ -22,6 +22,8 @@ import me.benfah.cu.api.CustomRegistry;
 import me.benfah.cu.api.Initialization;
 import me.benfah.cu.cmd.CommandRegistry;
 import me.benfah.cu.cmd.CustomUtilsCommandExecutor;
+import me.benfah.cu.init.impl.DropBoxInitializationMethod;
+import me.benfah.cu.init.impl.MinePackInitializationMethod;
 import me.benfah.cu.listener.BlockBreakListener;
 import me.benfah.cu.listener.InventoryClickListener;
 import me.benfah.cu.listener.InventoryCloseListener;
@@ -40,80 +42,7 @@ public class CustomUtils extends JavaPlugin
 	
 	
 	
-	/*@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
-	{
-		if(label.equalsIgnoreCase("customutils"))
-		if(sender instanceof Player)
-		{
-			Player p = (Player) sender;
-				if(args.length == 0)
-				{
-					p.sendMessage("/customutils item {ITEM_ID} - Gives the player the specific custom item.");
-					p.sendMessage("/customutils block {BLOCK_ID} - Gives the player the specific custom block.");
-					p.sendMessage("/customutils reload - Reloads the config.");
-					p.sendMessage("/customutils repackage - Repacks the resource pack and uploads it to Dropbox.");
-					
-
-				}
-				if(args.length == 1)
-				{
-					if(args[0].equalsIgnoreCase("repackage"))
-					{
-						if(p.hasPermission(new Permission("cu.repackage", PermissionDefault.OP)))
-						try {
-							Initialization.initRP(true);
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-						else
-						p.sendMessage("No permission!");	
-					}
-					else
-					if(args[0].equalsIgnoreCase("reload"))
-					{
-						if(p.hasPermission(new Permission("cu.reload", PermissionDefault.OP)))
-						{
-							cfg = YamlConfiguration.loadConfiguration(cfgFile);
-							p.sendMessage(ChatColor.GREEN + "Config reloaded!");
-						}
-					}
-				}
-				if(args.length == 2)
-				{
-					if(args[0].equalsIgnoreCase("block"))
-					{
-						for(CustomBlock cb : CustomRegistry.CUSTOM_BLOCK_REGISTRY)
-						{
-							if(args[1].equals(cb.getName()))
-							{
-								if(p.hasPermission(new Permission("cu.block." + cb.getName(), PermissionDefault.OP)))
-								p.getInventory().addItem(cb.getBlockItem());
-								else
-								p.sendMessage("No permission!");
-							}
-						}
-					}
-					else
-					if(args[0].equalsIgnoreCase("item"))
-					{
-						for(CustomItem ci : CustomRegistry.CUSTOM_ITEM_REGISTRY)
-						{
-							if(args[1].equals(ci.getName()))
-							{
-								if(p.hasPermission(new Permission("cu.item." + ci.getName(), PermissionDefault.OP)))
-								p.getInventory().addItem(ci.getItem());
-								else
-								p.sendMessage("No permission!");
-							}
-						}
-					}
-					
-				}
-			
-		}
-		return false;
-	}*/
+	
 	
 	@Override
 	public void onEnable()
@@ -124,6 +53,7 @@ public class CustomUtils extends JavaPlugin
 		JavassistUtil.getContainerClass();
 		instance = this;
 		CustomRegistry.initMaps();
+		Initialization.setCurrentMethod(new DropBoxInitializationMethod());
 		Bukkit.getPluginManager().registerEvents(new SlotChangeListener(), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerInteractEntityListener(), this);
 		Bukkit.getPluginManager().registerEvents(new InventoryClickListener(), this);
@@ -151,11 +81,8 @@ public class CustomUtils extends JavaPlugin
 				
 			@Override
 			public void run() {
-				try {
-					Initialization.init(false);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				Initialization.init(false);
+				
 				
 			}
 		});

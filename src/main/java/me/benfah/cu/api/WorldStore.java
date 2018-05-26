@@ -30,7 +30,7 @@ public class WorldStore
 		values.remove(e.getBlock().getLocation());
 	}
 	
-	protected WorldStore(World world, Map<Map<String, Object>, Map<String, Object>> values)
+	public WorldStore(World world, Map<Map<String, Object>, Map<String, Object>> values)
 	{
 		this.world = world;
 		Map<Location, Map<String, Object>> map = new HashMap<Location, Map<String, Object>>();

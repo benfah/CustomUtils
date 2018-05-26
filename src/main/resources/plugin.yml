@@ -1,5 +1,5 @@
 name: CustomUtils
-version: 0.1.2
+version: 0.1.4
 main: me.benfah.cu.main.CustomUtils
 load: POSTWORLD
 commands:

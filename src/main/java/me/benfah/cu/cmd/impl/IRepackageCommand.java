@@ -1,21 +1,22 @@
-package me.benfah.cu.cmd;
+package me.benfah.cu.cmd.impl;
 
-import org.bukkit.ChatColor;
+import java.io.IOException;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
-import me.benfah.cu.main.CustomUtils;
+import me.benfah.cu.api.Initialization;
+import me.benfah.cu.cmd.ISubCommand;
 
-public class IReloadCommand implements ISubCommand
+public class IRepackageCommand implements ISubCommand
 {
 
 	@Override
 	public String commandName()
 	{
-		return "reload";
+		return "repackage";
 	}
 
 	@Override
@@ -27,7 +28,7 @@ public class IReloadCommand implements ISubCommand
 	@Override
 	public String description()
 	{
-		return "Reloads the config.";
+		return "Repacks the resource pack and uploads it to Dropbox.";
 	}
 
 	@Override
@@ -39,14 +40,11 @@ public class IReloadCommand implements ISubCommand
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
 	{
-		if(sender.hasPermission(new Permission("cu.reload", PermissionDefault.OP)))
-		{
-			CustomUtils.cfg = YamlConfiguration.loadConfiguration(CustomUtils.cfgFile);
-			sender.sendMessage(ChatColor.GREEN + "Config reloaded!");
-		}
+		if(sender.hasPermission(new Permission("cu.repackage", PermissionDefault.OP)))
+		Initialization.initRP(true);
+		else
+		sender.sendMessage("No permission!");
 		return false;
 	}
-	
-	
 
 }
