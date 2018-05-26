@@ -5,4 +5,4 @@ job1:
   script: mvn package
   artifacts:
     paths:
-	- target/*.jar
+    - target/*.jar
