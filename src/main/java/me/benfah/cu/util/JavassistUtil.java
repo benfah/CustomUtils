@@ -1,14 +1,8 @@
 package me.benfah.cu.util;
  
-import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftInventoryView;
-import org.bukkit.inventory.Inventory;
-
-import com.google.common.reflect.Reflection;
-
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 import javassist.CtClass;
-import javassist.CtConstructor;
 import javassist.CtField;
 import javassist.CtMethod;
 import javassist.CtNewConstructor;

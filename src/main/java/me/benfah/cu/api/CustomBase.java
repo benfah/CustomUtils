@@ -1,10 +1,7 @@
 package me.benfah.cu.api;
 
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_12_R1.util.CraftMagicNumbers;
 import org.bukkit.plugin.Plugin;
-
-import net.minecraft.server.v1_12_R1.Item;
 
 
 public class CustomBase
