@@ -7,8 +7,6 @@ import java.util.Map.Entry;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -19,10 +17,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import me.benfah.cu.api.BlockInstance;
 import me.benfah.cu.api.CustomBlock;
-import me.benfah.cu.api.CustomGUI;
 import me.benfah.cu.api.CustomItem;
 import me.benfah.cu.api.CustomRegistry;
 import me.benfah.cu.api.Initialization;
+import me.benfah.cu.cmd.CommandRegistry;
+import me.benfah.cu.cmd.CustomUtilsCommandExecutor;
 import me.benfah.cu.listener.BlockBreakListener;
 import me.benfah.cu.listener.InventoryClickListener;
 import me.benfah.cu.listener.InventoryCloseListener;
@@ -32,21 +31,16 @@ import me.benfah.cu.listener.PlayerInteractListener;
 import me.benfah.cu.listener.PlayerJoinListener;
 import me.benfah.cu.listener.SlotChangeListener;
 import me.benfah.cu.util.JavassistUtil;
-import me.benfah.cu.util.ReflectionUtils;
 import me.benfah.cu.util.TickRunnable;
-import me.benfah.cu.util.Utils;
 public class CustomUtils extends JavaPlugin
 {
 	public static CustomUtils instance;
 	public static YamlConfiguration cfg;
 	public static File cfgFile;
 	
-	@Override
-	public void onLoad() {
-		super.onLoad();
-	}
 	
-	@Override
+	
+	/*@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
 	{
 		if(label.equalsIgnoreCase("customutils"))
@@ -119,7 +113,7 @@ public class CustomUtils extends JavaPlugin
 			
 		}
 		return false;
-	}
+	}*/
 	
 	@Override
 	public void onEnable()
@@ -130,7 +124,6 @@ public class CustomUtils extends JavaPlugin
 		JavassistUtil.getContainerClass();
 		instance = this;
 		CustomRegistry.initMaps();
-
 		Bukkit.getPluginManager().registerEvents(new SlotChangeListener(), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerInteractEntityListener(), this);
 		Bukkit.getPluginManager().registerEvents(new InventoryClickListener(), this);
@@ -139,7 +132,8 @@ public class CustomUtils extends JavaPlugin
 		Bukkit.getPluginManager().registerEvents(new PlayerInteractListener(), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(), this);
 		Bukkit.getPluginManager().registerEvents(new InventoryCloseListener(), this);
-		
+		CommandRegistry.initSubCommands();
+		Bukkit.getPluginCommand("customutils").setExecutor(new CustomUtilsCommandExecutor());
 		System.out.println("####### CUSTOMUTILS #######");
 		cfgFile = new File(getDataFolder(), "cfg.yml");
 		if(!cfgFile.exists())
