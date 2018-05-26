@@ -1,13 +1,11 @@
 package me.benfah.cu.util;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
-import org.bukkit.craftbukkit.v1_12_R1.util.CraftMagicNumbers;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
@@ -17,8 +15,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import me.benfah.cu.api.CustomBlock;
 import me.benfah.cu.api.CustomItem;
 import me.benfah.cu.api.CustomRegistry;
-import net.minecraft.server.v1_12_R1.Item;
-import net.minecraft.server.v1_12_R1.MinecraftKey;
 
 
 public class Utils
