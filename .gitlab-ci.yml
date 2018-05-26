@@ -3,3 +3,6 @@ image: maven:3-jdk-8
 job1:
   stage: deploy
   script: mvn package
+  artifacts:
+    paths:
+	- target/*.jar
