@@ -1,35 +1,34 @@
 package me.benfah.cu.cmd.impl;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
 import me.benfah.cu.cmd.ISubCommand;
+import me.benfah.cu.init.InitializationMethodRegistry;
 import me.benfah.cu.main.CustomUtils;
 import me.benfah.cu.util.Config;
 
-public class IReloadCommand implements ISubCommand
+public class IChooseMethodCommand implements ISubCommand
 {
 
 	@Override
 	public String commandName()
 	{
-		return "reload";
+		return "method";
 	}
 
 	@Override
 	public String[] argumentNames()
 	{
-		return new String[] {};
+		return new String[] { "{dropbox|minepack}" };
 	}
 
 	@Override
 	public String description()
 	{
-		return "Reloads the config.";
+		return "Changes the upload method of the resource pack.";
 	}
 
 	@Override
@@ -41,14 +40,11 @@ public class IReloadCommand implements ISubCommand
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
 	{
-		if(sender.hasPermission(new Permission("cu.reload", PermissionDefault.OP)))
+		if(sender.hasPermission(new Permission("cu.choosemethod", PermissionDefault.OP)) && InitializationMethodRegistry.getMethod(args[1]) != null)
 		{
-			Config.load();
-			sender.sendMessage(ChatColor.GREEN + "Config reloaded!");
+			Config.getConfiguration().set("init-method", args[1]);
 		}
 		return false;
 	}
-	
-	
 
 }

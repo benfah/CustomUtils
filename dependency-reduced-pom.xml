@@ -4,7 +4,7 @@
   <groupId>CustomUtils</groupId>
   <artifactId>CustomUtils</artifactId>
   <name>CustomUtilsMaven</name>
-  <version>a0.1.2</version>
+  <version>a0.1.4</version>
   <build>
     <resources>
       <resource>

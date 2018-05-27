@@ -22,6 +22,7 @@ import me.benfah.cu.api.CustomRegistry;
 import me.benfah.cu.api.Initialization;
 import me.benfah.cu.cmd.CommandRegistry;
 import me.benfah.cu.cmd.CustomUtilsCommandExecutor;
+import me.benfah.cu.init.InitializationMethodRegistry;
 import me.benfah.cu.init.impl.DropBoxInitializationMethod;
 import me.benfah.cu.init.impl.MinePackInitializationMethod;
 import me.benfah.cu.listener.BlockBreakListener;
@@ -32,13 +33,13 @@ import me.benfah.cu.listener.PlayerInteractEntityListener;
 import me.benfah.cu.listener.PlayerInteractListener;
 import me.benfah.cu.listener.PlayerJoinListener;
 import me.benfah.cu.listener.SlotChangeListener;
+import me.benfah.cu.util.Config;
 import me.benfah.cu.util.JavassistUtil;
 import me.benfah.cu.util.TickRunnable;
 public class CustomUtils extends JavaPlugin
 {
 	public static CustomUtils instance;
-	public static YamlConfiguration cfg;
-	public static File cfgFile;
+
 	
 	
 	
@@ -53,7 +54,11 @@ public class CustomUtils extends JavaPlugin
 		JavassistUtil.getContainerClass();
 		instance = this;
 		CustomRegistry.initMaps();
-		Initialization.setCurrentMethod(new DropBoxInitializationMethod());
+		
+		Config.onEnable();
+		
+		InitializationMethodRegistry.initMethods();
+		Initialization.setCurrentMethod(Config.getConfiguration().getString("init-method"));
 		Bukkit.getPluginManager().registerEvents(new SlotChangeListener(), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerInteractEntityListener(), this);
 		Bukkit.getPluginManager().registerEvents(new InventoryClickListener(), this);
@@ -65,17 +70,7 @@ public class CustomUtils extends JavaPlugin
 		CommandRegistry.initSubCommands();
 		Bukkit.getPluginCommand("customutils").setExecutor(new CustomUtilsCommandExecutor());
 		System.out.println("####### CUSTOMUTILS #######");
-		cfgFile = new File(getDataFolder(), "cfg.yml");
-		if(!cfgFile.exists())
-			try {
-				cfgFile.createNewFile();
-			} catch (IOException e) {
-
-				e.printStackTrace();
-			}
-		cfg = YamlConfiguration.loadConfiguration(cfgFile);
 		
-		setStandardConfigValues();
 		
 		Bukkit.getScheduler().runTask(instance, new Runnable() {
 				
@@ -109,29 +104,19 @@ public class CustomUtils extends JavaPlugin
 		CustomRegistry.saveIDNameMap();
 		CustomRegistry.saveWorldStores();
 		
-		try {
-			cfg.save(cfgFile);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		Config.onDisable();
 	}
-	
-	
-	private static void setStandardConfigValues()
+
+
+
+
+
+	public static CustomUtils getInstance()
 	{
-		setDefault("send-resourcepack-request", true);
-		
-		try {
-			cfg.save(cfgFile);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		return instance;
 	}
 	
-	private static void setDefault(String key, Object value)
-	{
-		if(!cfg.contains(key))
-		cfg.set(key, value);
-	}
+	
+	
 	
 }

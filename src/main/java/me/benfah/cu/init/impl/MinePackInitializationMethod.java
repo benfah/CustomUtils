@@ -39,6 +39,7 @@ import me.benfah.cu.api.CustomRegistry;
 import me.benfah.cu.api.WorldStore;
 import me.benfah.cu.init.IInitializationMethod;
 import me.benfah.cu.main.CustomUtils;
+import me.benfah.cu.util.Config;
 import me.benfah.cu.util.InitializationState;
 import me.benfah.cu.util.ReflectionUtils;
 import me.benfah.cu.util.Utils;
@@ -327,7 +328,7 @@ public class MinePackInitializationMethod implements IInitializationMethod
 				pw.close();
 				uploadResourcePack(finalrpzip);
 				for(Player p : Bukkit.getOnlinePlayers())
-				p.setResourcePack(CustomUtils.cfg.getString("resourcepack-link"));
+				p.setResourcePack(Config.getConfiguration().getString("resourcepack-link"));
 			}
 		}
 		catch(Exception e)
@@ -473,13 +474,11 @@ public class MinePackInitializationMethod implements IInitializationMethod
 		List<WebElement> wel = driver.findElements(By.className("select"));
 //		setPropertyInPropertyManager("resource-pack", wel.get(0).getAttribute("value"));
 //		setPropertyInPropertyManager("resource-pack-hash", wel.get(1).getAttribute("value"));
-		CustomUtils.cfg.set("resourcepack-link", wel.get(0).getAttribute("value").replace("https", "http"));
-		CustomUtils.cfg.set("resourcepack-hash", wel.get(1).getAttribute("value"));
-		try {
-			CustomUtils.cfg.save(CustomUtils.cfgFile);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		Config.getConfiguration().set("resourcepack-link", wel.get(0).getAttribute("value").replace("https", "http"));
+		Config.getConfiguration().set("resourcepack-hash", wel.get(1).getAttribute("value"));
+		
+		Config.save();
+		
 		saveProperties();
 	}
 	

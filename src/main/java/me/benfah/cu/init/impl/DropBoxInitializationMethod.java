@@ -47,6 +47,7 @@ import me.benfah.cu.api.CustomRegistry;
 import me.benfah.cu.api.WorldStore;
 import me.benfah.cu.init.IInitializationMethod;
 import me.benfah.cu.main.CustomUtils;
+import me.benfah.cu.util.Config;
 import me.benfah.cu.util.InitializationState;
 import me.benfah.cu.util.Utils;
 import me.benfah.cu.util.ZipCompare;
@@ -330,7 +331,7 @@ public class DropBoxInitializationMethod implements IInitializationMethod
 			}
 			else
 			{
-				if(!CustomUtils.cfg.contains("resourcepack-link"))
+				if(!Config.getConfiguration().contains("resourcepack-link"))
 				uploadResourcePack(finalrpzip);
 				else
 				if(/*resourcepack.length() == finalrpzip.length()*/ZipCompare.compare(resourcepack, finalrpzip))
@@ -357,7 +358,7 @@ public class DropBoxInitializationMethod implements IInitializationMethod
 				pw.close();
 				uploadResourcePack(finalrpzip);
 				for(Player p : Bukkit.getOnlinePlayers())
-				p.setResourcePack(CustomUtils.cfg.getString("resourcepack-link"));
+				p.setResourcePack(Config.getConfiguration().getString("resourcepack-link"));
 			}
 		} catch (Exception e)
 		{
@@ -456,7 +457,7 @@ public class DropBoxInitializationMethod implements IInitializationMethod
 	
 	private static void setup()
 	{
-		if(!CustomUtils.cfg.contains("dropbox.key") || CustomUtils.cfg.getString("dropbox.key").equals("null"))
+		if(!Config.getConfiguration().contains("dropbox.key") || Config.getConfiguration().getString("dropbox.key").equals("null"))
 		{	
 			
 			System.out.println("DROPBOX UPLOAD SETUP:");	
@@ -464,21 +465,18 @@ public class DropBoxInitializationMethod implements IInitializationMethod
 			System.out.println("2. Choose \"Dropbox API\", then choose \"App folder\", then name it somehow.");
 			System.out.println("3. Look for \"Development users\" and hit \"Enable additional users\".");
 			System.out.println("4. Enter the App key and the App secret into the cfg.yml of CustomUtils"); //TODO: <-
-			CustomUtils.cfg.set("dropbox.key", "null");
-			CustomUtils.cfg.set("dropbox.secret", "null");
-			try {
-				CustomUtils.cfg.save(CustomUtils.cfgFile);
-			} catch (IOException e1)
-			{
-				e1.printStackTrace();
-			}
+			Config.getConfiguration().set("dropbox.key", "null");
+			Config.getConfiguration().set("dropbox.secret", "null");
 			
-			while(CustomUtils.cfg.getString("dropbox.key").equals("null") && CustomUtils.cfg.getString("dropbox.secret").equals("null"))
+			Config.save();
+			
+			
+			while(Config.getConfiguration().getString("dropbox.key").equals("null") && Config.getConfiguration().getString("dropbox.secret").equals("null"))
 			{
 				try {
 					System.out.println("Hit enter when you're done.");
 					System.in.read();
-					CustomUtils.cfg.load(CustomUtils.cfgFile);
+					Config.load();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -488,33 +486,29 @@ public class DropBoxInitializationMethod implements IInitializationMethod
 			
 			System.out.println("Now authorize your account and paste the code to dropbox.code in the cfg.yml.");
 			
-			CustomUtils.cfg.set("dropbox.code", "null");
-			try {
-				CustomUtils.cfg.save(CustomUtils.cfgFile);
-			} catch (IOException e1)
-			{
-				e1.printStackTrace();
-			}
+			Config.getConfiguration().set("dropbox.code", "null");
+			Config.save();
 			
-			DbxAppInfo appInfo = new DbxAppInfo(CustomUtils.cfg.getString("dropbox.key"), CustomUtils.cfg.getString("dropbox.secret"));
+			
+			DbxAppInfo appInfo = new DbxAppInfo(Config.getConfiguration().getString("dropbox.key"), Config.getConfiguration().getString("dropbox.secret"));
 	        
 	        DbxRequestConfig config = new DbxRequestConfig("JavaTutorial/1.0");
 	        DbxWebAuth webAuth = new DbxWebAuth(config, appInfo);
 	        String url = webAuth.authorize(Request.newBuilder().withNoRedirect().build());
 	        System.out.println("Authorize: " + url);
-	        while(CustomUtils.cfg.getString("dropbox.code").equals("null"))
+	        while(Config.getConfiguration().getString("dropbox.code").equals("null"))
 	        {
 				System.out.println("Hit enter when you're done.");
 				try {
 					System.in.read();
-					CustomUtils.cfg.load(CustomUtils.cfgFile);
+					Config.load();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 	        }
 			try {
-				DbxAuthFinish daf = webAuth.finishFromCode(CustomUtils.cfg.getString("dropbox.code"));
-		        CustomUtils.cfg.set("dropbox.token", daf.getAccessToken());
+				DbxAuthFinish daf = webAuth.finishFromCode(Config.getConfiguration().getString("dropbox.code"));
+		        Config.getConfiguration().set("dropbox.token", daf.getAccessToken());
 			} catch (DbxException e) {
 				e.printStackTrace();
 			}
@@ -559,10 +553,10 @@ public class DropBoxInitializationMethod implements IInitializationMethod
 		try {
 			
 		
-		DbxAppInfo appInfo = new DbxAppInfo(CustomUtils.cfg.getString("dropbox.key"), CustomUtils.cfg.getString("dropbox.secret"));
+		DbxAppInfo appInfo = new DbxAppInfo(Config.getConfiguration().getString("dropbox.key"), Config.getConfiguration().getString("dropbox.secret"));
         
         DbxRequestConfig config = new DbxRequestConfig("JavaTutorial/1.0");
-        DbxClientV2 c2 = new DbxClientV2(config, CustomUtils.cfg.getString("dropbox.token"));
+        DbxClientV2 c2 = new DbxClientV2(config, Config.getConfiguration().getString("dropbox.token"));
         c2.files().listFolder("").getEntries().forEach((x) -> {
         	try {
 				c2.files().deleteV2(x.getPathLower());
@@ -584,8 +578,8 @@ public class DropBoxInitializationMethod implements IInitializationMethod
         link = c2.sharing().createSharedLinkWithSettings("/resourcepack-" + strippedUid + ".zip", SharedLinkSettings.newBuilder().withRequestedVisibility(RequestedVisibility.PUBLIC).build()).getUrl();
         link = link.replace("www", "dl");
         
-        CustomUtils.cfg.set("resourcepack-link", link);
-		CustomUtils.cfg.save(CustomUtils.cfgFile);
+        Config.getConfiguration().set("resourcepack-link", link);
+		Config.save();
 		} catch (Exception e)
 		{
 			e.printStackTrace();

@@ -9,6 +9,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 import me.benfah.cu.api.Initialization;
 import me.benfah.cu.main.CustomUtils;
+import me.benfah.cu.util.Config;
 import me.benfah.cu.util.InitializationState;
 
 public class PlayerJoinListener implements Listener
@@ -24,8 +25,8 @@ public class PlayerJoinListener implements Listener
 			
 			public void run()
 			{
-				if(CustomUtils.cfg.getBoolean("send-resourcepack-request"))
-				e.getPlayer().setResourcePack(CustomUtils.cfg.getString("resourcepack-link"));
+				if(Config.getConfiguration().getBoolean("send-resourcepack-request"))
+				e.getPlayer().setResourcePack(Config.getConfiguration().getString("resourcepack-link"));
 				if(Initialization.getCurrentMethod().getInitializationState().equals(InitializationState.INITIALIZING))
 				e.getPlayer().kickPlayer("Wait until the server initialized!");	
 			}
