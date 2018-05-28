@@ -6,7 +6,7 @@ import me.benfah.cu.main.CustomUtils;
 import me.benfah.cu.util.Config;
 
 
-public class Initialization
+public class InitializationMethodProvider
 {
 
 	public static IInitializationMethod getCurrentMethod()

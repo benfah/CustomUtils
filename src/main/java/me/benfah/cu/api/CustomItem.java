@@ -56,7 +56,7 @@ public class CustomItem extends CustomBase
 	public ItemStack getItem()
 	{
 		ItemStack result = new ItemStack(baseMaterial);
-		result.setDurability(id1);
+		result.setDurability(getMainModelPathEntry().getId());
 		ItemMeta im = result.getItemMeta();
 		im.setUnbreakable(true);
 		if(lore != null) im.setLore(lore);

@@ -250,7 +250,7 @@ public class DropBoxInitializationMethod implements IInitializationMethod
 					pw.write("{ \"parent\": \"item/handheld\", \"textures\": { \"layer0\": \"items/" + s + "\" }, \"overrides\": [ { \"predicate\": {\"damaged\": 0, \"damage\": 0}, \"model\": \"item/" + s + "\"}");
 					Material mat = map.inverse().get(s);
 					System.out.println(mat);
-					writeModels(new AbstractMap.SimpleEntry<String, Material>(s, mat), Utils.getMaxDurability(mat));
+					Utils.writeModels(new AbstractMap.SimpleEntry<String, Material>(s, mat), Utils.getMaxDurability(mat), pw);
 					pw.println("]}");
 					
 					pw.close();
@@ -364,95 +364,6 @@ public class DropBoxInitializationMethod implements IInitializationMethod
 		{
 			e.printStackTrace();
 		}
-	}
-	
-	private static void writeModels(Entry<String, Material> mat, int size)
-	{
-//		int i = 1;
-		
-		CustomBase[] cbarray = new CustomBase[size + 2];
-		
-		for(CustomBlock cb : CustomRegistry.CUSTOM_BLOCK_REGISTRY)
-		{
-			cbarray[cb.getId()] = cb;
-		}
-		for(CustomItem ci : CustomRegistry.CUSTOM_ITEM_REGISTRY)
-		{
-			cbarray[ci.getId()] = ci;
-		}
-		for(CustomGUI cg : CustomRegistry.CUSTOM_GUI_REGISTRY)
-		{
-			if(cg.getId() != -1)
-			cbarray[cg.getId()] = cg;
-			if(cg.getId2() != -1)
-			cbarray[cg.getId2()] = cg;
-		}
-		
-		for(CustomBase cb : cbarray)
-		{
-			if(cb != null)
-			if(cb instanceof CustomGUI)
-			{
-				CustomGUI cg = (CustomGUI) cb;
-				if(cg.getPathToModel1() != null)
-				{	
-				pw.println(",");
-				pw.println("{ \"predicate\": {\"damaged\": 0, \"damage\": " + getDamageForTool(cg.getId(), size + 1) + "}, \"model\": \"" + cg.getPathToModel1() + "\"}");
-				}
-				
-				
-				if(cg.getPathToModel2() != null)
-				{	
-				pw.println(",");
-				pw.println("{ \"predicate\": {\"damaged\": 0, \"damage\": " + getDamageForTool(cg.getId2(), size + 1) + "}, \"model\": \"" + cg.getPathToModel2() + "\"}");
-				}
-			}
-			else
-			{
-				pw.println(",");
-				pw.println("{ \"predicate\": {\"damaged\": 0, \"damage\": " + getDamageForTool(cb.getId(), size + 1) + "}, \"model\": \"" + cb.getPathToModel1() + "\"}");
-			}
-		}
-		pw.println(",");
-		pw.println("{ \"predicate\": {\"damaged\": 1, \"damage\": 0}, \"model\": \"item/" + mat.getKey() + "\"}");
-		
-//		for(CustomBlock cb : CustomRegistry.CUSTOM_BLOCK_REGISTRY)
-//		{
-//			pw.println(",");
-//			pw.println("{ \"predicate\": {\"damaged\": 0, \"damage\": " + getDamageForTool(cb.id1) + "}, \"model\": \"" + cb.getModelPath() + "\"}");
-////			cb.id1 = (short) i;
-////			i++;
-//		}
-//		
-//		for(CustomGUI cg : CustomRegistry.CUSTOM_GUI_REGISTRY)
-//		{
-//			if(cg.pathToModel1 != null)
-//			{	
-//			pw.println(",");
-//			pw.println("{ \"predicate\": {\"damaged\": 0, \"damage\": " + getDamageForTool(cg.id1) + "}, \"model\": \"" + cg.pathToModel1 + "\"}");
-//			}
-//			
-//			
-//			if(cg.pathToModel2 != null)
-//			{	
-//			pw.println(",");
-//			pw.println("{ \"predicate\": {\"damaged\": 0, \"damage\": " + getDamageForTool(cg.id2) + "}, \"model\": \"" + cg.pathToModel2 + "\"}");
-//			}
-//			
-//		}
-//		
-//		for(CustomItem ci : CustomRegistry.CUSTOM_ITEM_REGISTRY)
-//		{
-//			pw.println(",");
-//			pw.println("{ \"predicate\": {\"damaged\": 0, \"damage\": " + getDamageForTool(ci.id1) + "}, \"model\": \"" + ci.pathToModel1 + "\"}");
-//		}
-//		pw.println(",");
-//		pw.println("{ \"predicate\": {\"damaged\": 1, \"damage\": 0}, \"model\": \"item/diamond_hoe\"}");
-	}
-	
-	private static String getDamageForTool(double dmg, double maxSize)
-	{
-		return new BigDecimal(1D/1562D*dmg).toPlainString();
 	}
 	
 	private static void setup()

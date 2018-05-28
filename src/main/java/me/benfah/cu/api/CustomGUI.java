@@ -11,6 +11,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
 import me.benfah.cu.util.JavassistUtil;
+import me.benfah.cu.util.InformationEntry;
 import me.benfah.cu.util.Utils;
 
 public class CustomGUI extends CustomBase
@@ -18,38 +19,41 @@ public class CustomGUI extends CustomBase
 	
 
 	protected int size;
-	protected String pathToModel2;
-	protected String name2;
-	protected short id2;
+//	protected String pathToModel2;
+//	protected String name2;
+//	protected short id2;
 	
 	
-	public short getId2() {
-		return id2;
+	
+
+
+
+
+
+
+	public CustomGUI(InformationEntry pathToUpperModel, InformationEntry pathToLowerModel, int size)
+	{
+		
+		super(pathToUpperModel, Material.DIAMOND_HOE);
+		this.getModelPathEntry().add(pathToLowerModel);
+		this.size = size;
 	}
-
-
-
-
-
-
+	
+	public CustomGUI(String name, InformationEntry pathToUpperModel, InformationEntry pathToLowerModel, int size, Material baseMat)
+	{
+		
+		super(pathToUpperModel, baseMat);
+		this.getModelPathEntry().add(pathToLowerModel);
+		this.size = size;
+	}
+	
 	public CustomGUI(String name, String pathToUpperModel, String pathToLowerModel, int size)
 	{
 		
-		super(name + "1", pathToUpperModel, Material.DIAMOND_HOE);
-		this.name2 = name + "2";
-		this.pathToModel2 = pathToLowerModel;
+		super(new InformationEntry(pathToUpperModel, name + "1"), Material.DIAMOND_HOE);
+		this.getModelPathEntry().add(new InformationEntry(pathToLowerModel, name + "2"));
 		this.size = size;
 	}
-	public CustomGUI(String name, String pathToUpperModel, String pathToLowerModel, int size, Material baseMat)
-	{
-		
-		super(name + "1", pathToUpperModel, baseMat);
-		this.name2 = name + "2";
-		this.pathToModel2 = pathToLowerModel;
-		this.size = size;
-	}
-	
-	
 	
 	
 	
@@ -70,14 +74,12 @@ public class CustomGUI extends CustomBase
 	}
 	
 	
-	protected void setPlugin(Plugin plugin) {
-		this.plugin = plugin;
-	}
+	
 	
 	protected ItemStack getUpperStack()
 	{
 		ItemStack upper = new ItemStack(baseMaterial);
-		upper.setDurability(id1);
+		upper.setDurability(getMainModelPathEntry().getId());
 		ItemMeta im = upper.getItemMeta();
 		im.setDisplayName("");
 		im.setUnbreakable(true);
@@ -91,7 +93,7 @@ public class CustomGUI extends CustomBase
 	{
 
 		ItemStack lower = new ItemStack(baseMaterial);
-		lower.setDurability(id2);
+		lower.setDurability(getSecondModelPathEntry().getId());
 		ItemMeta lowerim = lower.getItemMeta();
 		lowerim.setUnbreakable(true);
 		lowerim.setDisplayName("");
@@ -127,9 +129,9 @@ public class CustomGUI extends CustomBase
 			e.printStackTrace();
 		}
 		
-		if(id1 != -1)
+		if(getMainModelPathEntry().getId() != -1)
 		inv.setItem(0, getUpperStack());
-		if(id2 != -1)
+		if(getSecondModelPathEntry().getId() != -1)
 		inv.setItem(inv.getSize() - 9, getLowerStack());
 		
 		inv.setItem(5, new ItemStack(Material.ANVIL));
@@ -147,19 +149,19 @@ public class CustomGUI extends CustomBase
 	
 	
 	public String getName() {
-		return name;
+		return getMainModelPathEntry().getName();
 	}
 
 
 
 
 
-
-	public String getPathToModel2()
-	{
-		return pathToModel2;
-	}
 
 	
+
+	public InformationEntry getSecondModelPathEntry()
+	{
+		return getModelPathEntry().get(1);
+ 	}
 	
 }

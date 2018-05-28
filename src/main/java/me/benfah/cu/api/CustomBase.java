@@ -1,23 +1,25 @@
 package me.benfah.cu.api;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.bukkit.Material;
 import org.bukkit.plugin.Plugin;
+
+import me.benfah.cu.util.InformationEntry;
 
 
 public class CustomBase
 {
 	protected Plugin plugin;
-	protected String name;
 	
-	protected short id1 = 0;
+	final private ArrayList<InformationEntry> mpe = new ArrayList<>();
 	
 	
-	public short getId() {
-		return id1;
-	}
+	
 
 	
-	protected String pathToModel1;
 	
 
 
@@ -25,17 +27,20 @@ public class CustomBase
 
 	
 	
-	public String getName()
+	
+	
+	
+	
+	public CustomBase(InformationEntry entry, Material baseMaterial)
 	{
-		return name;
+		mpe.add(entry);
+		this.baseMaterial = baseMaterial;
+		
 	}
-	
-	
 	
 	public CustomBase(String name, String modelPath, Material baseMaterial)
 	{
-		this.pathToModel1 = modelPath;
-		this.name = name;	
+		mpe.add(new InformationEntry(modelPath, name));
 		this.baseMaterial = baseMaterial;
 		
 	}
@@ -45,8 +50,31 @@ public class CustomBase
 		return baseMaterial;
 	}
 	
-	public String getPathToModel1()
+	
+
+	public InformationEntry getMainModelPathEntry()
 	{
-		return pathToModel1;
+		return mpe.get(0);
 	}
+	
+	public List<InformationEntry> getModelPathEntry()
+	{
+		return mpe;
+	}
+	
+	public String getName()
+	{
+		return getMainModelPathEntry().getName();
+	}
+
+	public Plugin getPlugin()
+	{
+		return plugin;
+	}
+
+	public void setPlugin(Plugin plugin)
+	{
+		this.plugin = plugin;
+	}
+	
 }

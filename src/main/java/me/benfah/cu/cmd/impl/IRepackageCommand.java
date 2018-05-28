@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
-import me.benfah.cu.api.Initialization;
+import me.benfah.cu.api.InitializationMethodProvider;
 import me.benfah.cu.cmd.ISubCommand;
 
 public class IRepackageCommand implements ISubCommand
@@ -41,7 +41,7 @@ public class IRepackageCommand implements ISubCommand
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
 	{
 		if(sender.hasPermission(new Permission("cu.repackage", PermissionDefault.OP)))
-		Initialization.initRP(true);
+		InitializationMethodProvider.initRP(true);
 		else
 		sender.sendMessage("No permission!");
 		return false;

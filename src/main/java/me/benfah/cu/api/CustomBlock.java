@@ -62,22 +62,23 @@ public class CustomBlock extends CustomBase
 	protected String title;
 	
 	
-	public void setName(String name) {
-		this.name = name;
+	public void setName(String name)
+	{
+		getMainModelPathEntry().setName(name);
 	}
 
 	
 	public short getId() {
-		return id1;
+		return getMainModelPathEntry().getId();
 	}
 	public void setId(short id) {
-		this.id1 = id;
+		getMainModelPathEntry().setId(id);
 	}
 	
-	public void setModelPath(String path)
-	{
-		this.pathToModel1 = path;
-	}
+//	public void setModelPath(String path)
+//	{
+//		this.pathToModel1 = path;
+//	}
 	
 	
 	
@@ -85,7 +86,7 @@ public class CustomBlock extends CustomBase
 	
 	public String getModelPath()
 	{
-		return pathToModel1;
+		return getMainModelPathEntry().getPathToModel();
 	}
 	
 	
@@ -100,7 +101,7 @@ public class CustomBlock extends CustomBase
 		ItemMeta im = is.getItemMeta();
 		im.setUnbreakable(true);
 		im.setDisplayName(ChatColor.RESET + title);
-		is.setDurability(id1);
+		is.setDurability(getId());
 		is.setItemMeta(im);
 		is = Utils.updateTags(is);
 		return is;
@@ -167,7 +168,7 @@ public class CustomBlock extends CustomBase
 		Object tileEntity = setAccessible(craftCreatureSpawnerClass.getSuperclass().getDeclaredMethod("getTileEntity")).invoke(cs);
 		Object msa = tileEntity.getClass().getDeclaredMethod("getSpawner").invoke(tileEntity);
 		
-			Object nbtz = mojangsonParserClass.getMethod("parse", String.class).invoke(null, "{MaxNearbyEntities:0s,RequiredPlayerRange:0s,SpawnData:{id:\"minecraft:armor_stand\",Invisible:1,Marker:1,ArmorItems:[{},{},{},{id:\"minecraft:" + Utils.getUnlocalizedName(baseMaterial) + "\",Count:1b,Damage:" + id1 + "s,tag:{Unbreakable:1}}]}}");
+			Object nbtz = mojangsonParserClass.getMethod("parse", String.class).invoke(null, "{MaxNearbyEntities:0s,RequiredPlayerRange:0s,SpawnData:{id:\"minecraft:armor_stand\",Invisible:1,Marker:1,ArmorItems:[{},{},{},{id:\"minecraft:" + Utils.getUnlocalizedName(baseMaterial) + "\",Count:1b,Damage:" + getId() + "s,tag:{Unbreakable:1}}]}}");
 			mobSpawnerAbstractClass.getDeclaredMethod("a", nbtz.getClass()).invoke(msa, nbtz);
 		} catch (Exception e1) {
 			e1.printStackTrace();
@@ -203,9 +204,12 @@ public class CustomBlock extends CustomBase
 	{
 		this.title = title;
 	}
+	
 	public Method setAccessible(Method f)
 	{
 		f.setAccessible(true);
 		return f;
 	}
+	
+	
 }

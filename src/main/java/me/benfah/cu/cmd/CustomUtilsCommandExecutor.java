@@ -14,7 +14,7 @@ import org.bukkit.permissions.PermissionDefault;
 import me.benfah.cu.api.CustomBlock;
 import me.benfah.cu.api.CustomItem;
 import me.benfah.cu.api.CustomRegistry;
-import me.benfah.cu.api.Initialization;
+import me.benfah.cu.api.InitializationMethodProvider;
 import me.benfah.cu.main.CustomUtils;
 
 public class CustomUtilsCommandExecutor implements CommandExecutor

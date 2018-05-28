@@ -23,6 +23,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.google.common.collect.HashBiMap;
 
 import me.benfah.cu.main.CustomUtils;
+import me.benfah.cu.util.InformationEntry;
 import me.benfah.cu.util.JavassistUtil;
 import me.benfah.cu.util.Utils;
 
@@ -124,93 +125,114 @@ public class CustomRegistry
 		
 	}
 	
-	public static int getIDOfCustomBlock(CustomBlock cb)
+	public static void setIds(CustomBase cb)
 	{
-		if(cb.id1 != 0)
-		return cb.id1;
-		
-		if(ID_NAME_MAP.get(cb.getName()) != null)
-		return (int) ID_NAME_MAP.get(cb.getName());
-		
-		Collection<Integer> c = ID_NAME_MAP.values();
-		int i = 0;
-		while(true)
+		for(InformationEntry entr : cb.getModelPathEntry())
 		{
-			i++;
-			if(!c.contains(i))
+			Collection<Integer> c = ID_NAME_MAP.values();
+			int i = 0;
+			if(entr.getPathToModel() != null)
+			while(true)
 			{
-				ID_NAME_MAP.put(cb.getName(), i);
-				return i;
+				i++;
+				if(!c.contains(i))
+				{
+					ID_NAME_MAP.put(entr.getName(), i);
+					entr.setId((short) i);
+					break;
+				}
 			}
 		}
-		
 	}
 	
-	public static int getIDOfCustomItem(CustomItem ci)
-	{
-		if(ci.id1 != 0)
-		return ci.id1;
-		
-		if(ID_NAME_MAP.get(ci.getName()) != null)
-		return (int) ID_NAME_MAP.get(ci.getName());
-		
-		Collection<Integer> c = ID_NAME_MAP.values();
-		int i = 0;
-		while(true)
-		{
-			i++;
-			if(!c.contains(i))
-			{
-				ID_NAME_MAP.put(ci.getName(), i);
-				return i;
-			}
-		}
-		
-	}
 	
-	public static int[] getIDsOfCustomGUI(CustomGUI cg)
-	{
-		if(cg.id1 != 0 && cg.id2 != 0)
-		return new int[] {cg.id1, cg.id2};
-		
-		
-		
-		if(ID_NAME_MAP.get(cg.name) != null && ID_NAME_MAP.get(cg.name2) != null)
-		return new int[] { ID_NAME_MAP.get(cg.name), ID_NAME_MAP.get(cg.name2) };
-		
-		Collection<Integer> c = ID_NAME_MAP.values();
-		int i = 0;
-		int[] intarray = new int[2];
-		if(cg.pathToModel1 != null)
-		while(true)
-		{
-			i++;
-			if(!c.contains(i))
-			{
-				ID_NAME_MAP.put(cg.name, i);
-				intarray[0] = i;
-				break;
-			}
-		}
-		else
-		intarray[0] = -1;
-		
-		if(cg.pathToModel2 != null)
-		while(true)
-		{
-			i++;
-			if(!c.contains(i))
-			{
-				ID_NAME_MAP.put(cg.name2, i);
-				intarray[1] = i;
-			}
-		}
-		else
-		intarray[1] = -1;
-		return intarray;
-		
-	}
-	
+//	public static int getIDOfCustomBlock(CustomBlock cb)
+//	{
+//		if(cb.getMainModelPathEntry().getId() != 0)
+//		return cb.getMainModelPathEntry().getId();
+//		
+//		if(ID_NAME_MAP.get(cb.getMainModelPathEntry().getName()) != null)
+//		return (int) ID_NAME_MAP.get(cb.getMainModelPathEntry().getName());
+//		
+//		Collection<Integer> c = ID_NAME_MAP.values();
+//		int i = 0;
+//		while(true)
+//		{
+//			i++;
+//			if(!c.contains(i))
+//			{
+//				ID_NAME_MAP.put(cb.getMainModelPathEntry().getName(), i);
+//				return i;
+//			}
+//		}
+//		
+//	}
+//	
+//	public static int getIDOfCustomItem(CustomItem ci)
+//	{
+//		if(ci.id1 != 0)
+//		return ci.id1;
+//		
+//		if(ID_NAME_MAP.get(ci.getName()) != null)
+//		return (int) ID_NAME_MAP.get(ci.getName());
+//		
+//		Collection<Integer> c = ID_NAME_MAP.values();
+//		int i = 0;
+//		while(true)
+//		{
+//			i++;
+//			if(!c.contains(i))
+//			{
+//				ID_NAME_MAP.put(ci.getName(), i);
+//				return i;
+//			}
+//		}
+//		
+//	}
+//	
+//	public static int[] getIDsOfCustomGUI(CustomGUI cg)
+//	{
+//		if(cg.id1 != 0 && cg.id2 != 0)
+//		return new int[] {cg.id1, cg.id2};
+//		
+//		
+//		
+//		if(ID_NAME_MAP.get(cg.name) != null && ID_NAME_MAP.get(cg.name2) != null)
+//		return new int[] { ID_NAME_MAP.get(cg.name), ID_NAME_MAP.get(cg.name2) };
+//		
+//		Collection<Integer> c = ID_NAME_MAP.values();
+//		int i = 0;
+//		int[] intarray = new int[2];
+//		if(cg.pathToModel1 != null)
+//		while(true)
+//		{
+//			i++;
+//			if(!c.contains(i))
+//			{
+//				ID_NAME_MAP.put(cg.name, i);
+//				intarray[0] = i;
+//				break;
+//			}
+//		}
+//		else
+//		intarray[0] = -1;
+//		
+//		if(cg.pathToModel2 != null)
+//		while(true)
+//		{
+//			i++;
+//			if(!c.contains(i))
+//			{
+//				ID_NAME_MAP.put(cg.name2, i);
+//				intarray[1] = i;
+//			}
+//		}
+//		else
+//		intarray[1] = -1;
+//		return intarray;
+//		
+//	}
+	@Deprecated
 	public static void registerItem(CustomItem ci, JavaPlugin pl)
 	{
 		
@@ -220,13 +242,13 @@ public class CustomRegistry
 		
 		if(!PLUGIN_REGISTRY.contains(pl))
 		PLUGIN_REGISTRY.add(pl);
-		int i = getIDOfCustomItem(ci);
-		ci.id1 = (short) i;
+		setIds(ci);
 		CUSTOM_ITEM_REGISTRY.add(ci);
 		if(ci.getRecipe() != null)
 		Bukkit.addRecipe(ci.getRecipe());	
 	}
 	
+	@Deprecated
 	public static void registerBlock(CustomBlock cb, JavaPlugin pl)
 	{
 		
@@ -236,8 +258,7 @@ public class CustomRegistry
 		
 		if(!PLUGIN_REGISTRY.contains(pl))
 		PLUGIN_REGISTRY.add(pl);
-		int i = getIDOfCustomBlock(cb);
-		cb.id1 = (short) i;
+		setIds(cb);
 		CUSTOM_BLOCK_REGISTRY.add(cb);
 		if(cb.getRecipe() != null)
 		Bukkit.addRecipe(cb.getRecipe());
@@ -247,8 +268,13 @@ public class CustomRegistry
 	{
 		for(CustomItem ci : CUSTOM_ITEM_REGISTRY)
 		{
-			if(name.equals(ci.getName()))
-			return ci;
+//			if(name.equals(ci.getName()))
+//			return ci;
+			for(InformationEntry info : ci.getModelPathEntry())
+			{
+				if(info.getName().equals(name))
+				return ci;	
+			}
 		}
 		return null;
 	}
@@ -298,7 +324,7 @@ public class CustomRegistry
 	{
 		for(CustomItem ci : CUSTOM_ITEM_REGISTRY)
 		{
-			if(stack.getDurability() == ci.id1)
+			if(stack.getDurability() == ci.getMainModelPathEntry().getId())
 			if(stack.getItemMeta().isUnbreakable() == true)
 			{
 				return true;
@@ -311,7 +337,7 @@ public class CustomRegistry
 	{
 		for(CustomItem ci : CUSTOM_ITEM_REGISTRY)
 		{
-			if(stack.getDurability() == ci.id1)
+			if(stack.getDurability() == ci.getMainModelPathEntry().getId())
 			{
 				return ci;
 			}
@@ -391,16 +417,18 @@ public class CustomRegistry
 	{
 		for(CustomBlock cb : CUSTOM_BLOCK_REGISTRY)
 		{
-			if(cb.getId() == id)
+			for(InformationEntry info : cb.getModelPathEntry())
 			{
+				if(info.getId() == id)
 				return cb;
 			}
 		}
 		
 		for(CustomGUI gui : CUSTOM_GUI_REGISTRY)
 		{
-			if(gui.id1 == id || gui.id2 == id)
+			for(InformationEntry info : gui.getModelPathEntry())
 			{
+				if(info.getId() == id)
 				return gui;
 			}
 		}
@@ -408,17 +436,43 @@ public class CustomRegistry
 		return null;
 	}
 	
+	public static ArrayList<CustomBase> getAllEntries()
+	{
+		ArrayList<CustomBase> arr = new ArrayList<>();
+		arr.addAll(CUSTOM_BLOCK_REGISTRY);
+		arr.addAll(CUSTOM_GUI_REGISTRY);
+		arr.addAll(CUSTOM_ITEM_REGISTRY);
+		return arr;
+	}
 	
+	public static boolean register(CustomBase cb, JavaPlugin pl)
+	{
+		cb.setPlugin(pl);
+		if(!PLUGIN_REGISTRY.contains(pl))
+		PLUGIN_REGISTRY.add(pl);
+		
+		setIds(cb);
+
+		if(cb instanceof CustomGUI)
+		return CUSTOM_GUI_REGISTRY.add((CustomGUI) cb);
+		
+		if(cb instanceof CustomItem)
+		return CUSTOM_ITEM_REGISTRY.add((CustomItem) cb);
+		
+		if(cb instanceof CustomBlock)
+		return CUSTOM_BLOCK_REGISTRY.add((CustomBlock) cb);
+		
+		return false;
+	}
 	
+	@Deprecated
 	public static boolean registerGUI(CustomGUI cg, JavaPlugin pl)
 	{
 		cg.setPlugin(pl);
 		if(!PLUGIN_REGISTRY.contains(pl))
 		PLUGIN_REGISTRY.add(pl);
 		
-		int[] i = getIDsOfCustomGUI(cg);
-		cg.id1 = (short) i[0];
-		cg.id2 = (short) i[1];
+		setIds(cg);
 
 		return CUSTOM_GUI_REGISTRY.add(cg);
 	}

@@ -19,7 +19,7 @@ import me.benfah.cu.api.BlockInstance;
 import me.benfah.cu.api.CustomBlock;
 import me.benfah.cu.api.CustomItem;
 import me.benfah.cu.api.CustomRegistry;
-import me.benfah.cu.api.Initialization;
+import me.benfah.cu.api.InitializationMethodProvider;
 import me.benfah.cu.cmd.CommandRegistry;
 import me.benfah.cu.cmd.CustomUtilsCommandExecutor;
 import me.benfah.cu.init.InitializationMethodRegistry;
@@ -58,7 +58,7 @@ public class CustomUtils extends JavaPlugin
 		Config.onEnable();
 		
 		InitializationMethodRegistry.initMethods();
-		Initialization.setCurrentMethod(Config.getConfiguration().getString("init-method"));
+		InitializationMethodProvider.setCurrentMethod(Config.getConfiguration().getString("init-method"));
 		Bukkit.getPluginManager().registerEvents(new SlotChangeListener(), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerInteractEntityListener(), this);
 		Bukkit.getPluginManager().registerEvents(new InventoryClickListener(), this);
@@ -76,7 +76,7 @@ public class CustomUtils extends JavaPlugin
 				
 			@Override
 			public void run() {
-				Initialization.init(false);
+				InitializationMethodProvider.init(false);
 				
 				
 			}
