@@ -9,6 +9,7 @@ import org.bukkit.permissions.PermissionDefault;
 import me.benfah.cu.api.CustomItem;
 import me.benfah.cu.api.CustomRegistry;
 import me.benfah.cu.cmd.ISubCommand;
+import me.benfah.cu.util.Utils;
 
 public class IItemCommand implements ISubCommand
 {
@@ -40,6 +41,12 @@ public class IItemCommand implements ISubCommand
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
 	{
+		if(args.length == 1)
+		{
+			Utils.sendDetailedList(sender, CustomRegistry.CUSTOM_ITEM_REGISTRY);
+			return true;
+		}
+		
 		Player p = (Player) sender;
 		for (CustomItem ci : CustomRegistry.CUSTOM_ITEM_REGISTRY)
 		{

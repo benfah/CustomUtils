@@ -40,7 +40,7 @@ public class IChooseMethodCommand implements ISubCommand
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
 	{
-		if(sender.hasPermission(new Permission("cu.choosemethod", PermissionDefault.OP)) && InitializationMethodRegistry.getMethod(args[1]) != null)
+		if(sender.hasPermission(new Permission("cu.choosemethod", PermissionDefault.OP)) && InitializationMethodRegistry.getMethod(args[1]) != null && args.length == 2)
 		{
 			Config.getConfiguration().set("init-method", args[1]);
 		}

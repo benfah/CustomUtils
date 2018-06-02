@@ -29,7 +29,7 @@ public class CustomUtilsCommandExecutor implements CommandExecutor
 			{	
 				for(ISubCommand cmd : CommandRegistry.getSubCommands())
 				{
-					if(args.length == cmd.argumentNames().length + 1 && args[0].equals(cmd.commandName()))
+					if(args[0].equals(cmd.commandName()))
 					{
 						if(cmd.playerOnly())
 						{

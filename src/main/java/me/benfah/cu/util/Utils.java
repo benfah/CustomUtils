@@ -4,13 +4,14 @@ import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Map.Entry;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
+import org.bukkit.command.CommandSender;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
@@ -174,70 +175,80 @@ public class Utils
 	public static void writeModels(Entry<String, Material> mat, int size, PrintWriter pw)
 	{
 		
-//		CustomBase[] cbarray = new CustomBase[size + 2];
+		CustomBase[] cbarray = new CustomBase[size + 2];
+		
+		for(CustomBlock cb : CustomRegistry.CUSTOM_BLOCK_REGISTRY)
+		{
+			cbarray[cb.getId()] = cb;
+		}
+		for(CustomItem ci : CustomRegistry.CUSTOM_ITEM_REGISTRY)
+		{
+			cbarray[ci.getMainModelPathEntry().getId()] = ci;
+		}
+		for(CustomGUI cg : CustomRegistry.CUSTOM_GUI_REGISTRY)
+		{
+			if(cg.getMainModelPathEntry().getId() != -1)
+			cbarray[cg.getMainModelPathEntry().getId()] = cg;
+			if(cg.getSecondModelPathEntry().getId() != -1)
+			cbarray[cg.getSecondModelPathEntry().getId()] = cg;
+		}
+		
+		for(CustomBase cb : cbarray)
+		{
+			if(cb != null)
+			if(cb instanceof CustomGUI)
+			{
+				CustomGUI cg = (CustomGUI) cb;
+				if(cg.getMainModelPathEntry().getPathToModel() != null)
+				{	
+				pw.println(",");
+				pw.println("{ \"predicate\": {\"damaged\": 0, \"damage\": " + getDamageForTool(cg.getMainModelPathEntry().getId(), size + 1) + "}, \"model\": \"" + cg.getMainModelPathEntry().getPathToModel() + "\"}");
+				}
+				
+				
+				if(cg.getSecondModelPathEntry().getPathToModel() != null)
+				{	
+				pw.println(",");
+				pw.println("{ \"predicate\": {\"damaged\": 0, \"damage\": " + getDamageForTool(cg.getSecondModelPathEntry().getId(), size + 1) + "}, \"model\": \"" + cg.getSecondModelPathEntry().getPathToModel() + "\"}");
+				}
+			}
+			else
+			{
+				pw.println(",");
+				pw.println("{ \"predicate\": {\"damaged\": 0, \"damage\": " + getDamageForTool(cb.getMainModelPathEntry().getId(), size + 1) + "}, \"model\": \"" + cb.getMainModelPathEntry().getPathToModel() + "\"}");
+			}
+		}
+		pw.println(",");
+		pw.println("{ \"predicate\": {\"damaged\": 1, \"damage\": 0}, \"model\": \"item/" + mat.getKey() + "\"}");
+//		CustomBase[] cbList = CustomRegistry.getAllEntries();
 //		
-//		for(CustomBlock cb : CustomRegistry.CUSTOM_BLOCK_REGISTRY)
+//		for(CustomBase cb : cbList)
 //		{
-//			cbarray[cb.getId()] = cb;
-//		}
-//		for(CustomItem ci : CustomRegistry.CUSTOM_ITEM_REGISTRY)
-//		{
-//			cbarray[ci.getId()] = ci;
-//		}
-//		for(CustomGUI cg : CustomRegistry.CUSTOM_GUI_REGISTRY)
-//		{
-//			if(cg.getId() != -1)
-//			cbarray[cg.getId()] = cg;
-//			if(cg.getId2() != -1)
-//			cbarray[cg.getId2()] = cg;
-//		}
-//		
-//		for(CustomBase cb : cbarray)
-//		{
-//			if(cb != null)
-//			if(cb instanceof CustomGUI)
+//			for(InformationEntry ent : cb.getModelPathEntry())
 //			{
-//				CustomGUI cg = (CustomGUI) cb;
-//				if(cg.getPathToModel1() != null)
+//				if(ent.getPathToModel() != null)
 //				{	
-//				pw.println(",");
-//				pw.println("{ \"predicate\": {\"damaged\": 0, \"damage\": " + getDamageForTool(cg.getId(), size + 1) + "}, \"model\": \"" + cg.getPathToModel1() + "\"}");
+//					pw.println(",");
+//					pw.println("{ \"predicate\": {\"damaged\": 0, \"damage\": " + getDamageForTool(ent.getId(), size + 1) + "}, \"model\": \"" + ent.getPathToModel() + "\"}");
 //				}
-//				
-//				
-//				if(cg.getPathToModel2() != null)
-//				{	
-//				pw.println(",");
-//				pw.println("{ \"predicate\": {\"damaged\": 0, \"damage\": " + getDamageForTool(cg.getId2(), size + 1) + "}, \"model\": \"" + cg.getPathToModel2() + "\"}");
-//				}
-//			}
-//			else
-//			{
-//				pw.println(",");
-//				pw.println("{ \"predicate\": {\"damaged\": 0, \"damage\": " + getDamageForTool(cb.getId(), size + 1) + "}, \"model\": \"" + cb.getPathToModel1() + "\"}");
 //			}
 //		}
 //		pw.println(",");
 //		pw.println("{ \"predicate\": {\"damaged\": 1, \"damage\": 0}, \"model\": \"item/" + mat.getKey() + "\"}");
-		ArrayList<CustomBase> cbList = CustomRegistry.getAllEntries();
-		
-		for(CustomBase cb : cbList)
-		{
-			for(InformationEntry ent : cb.getModelPathEntry())
-			{
-				if(ent.getPathToModel() != null)
-				{	
-					pw.println(",");
-					pw.println("{ \"predicate\": {\"damaged\": 0, \"damage\": " + getDamageForTool(ent.getId(), size + 1) + "}, \"model\": \"" + ent.getPathToModel() + "\"}");
-				}
-			}
-		}
 		
 	}
 	
 	private static String getDamageForTool(double dmg, double maxSize)
 	{
-		return new BigDecimal(1D/1562D*dmg).setScale(19, RoundingMode.FLOOR).toPlainString();
+		return new BigDecimal(1D/1562D*dmg).toPlainString();
+	}
+	
+	public static void sendDetailedList(CommandSender sender, ArrayList<? extends CustomBase> baselist)
+	{
+		for(CustomBase cb : baselist)
+		{
+			sender.sendMessage(ChatColor.GREEN + cb.getName() + " - " + cb.getPlugin().getName());
+		}
 	}
 	
 }

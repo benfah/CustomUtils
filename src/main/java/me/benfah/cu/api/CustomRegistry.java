@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -129,18 +130,28 @@ public class CustomRegistry
 	{
 		for(InformationEntry entr : cb.getModelPathEntry())
 		{
-			Collection<Integer> c = ID_NAME_MAP.values();
-			int i = 0;
-			if(entr.getPathToModel() != null)
-			while(true)
+			if(!ID_NAME_MAP.containsKey(entr.getName()))
 			{
-				i++;
-				if(!c.contains(i))
+					
+				
+				
+				Collection<Integer> c = ID_NAME_MAP.values();
+				int i = 0;
+				if(entr.getPathToModel() != null)
+				while(true)
 				{
-					ID_NAME_MAP.put(entr.getName(), i);
-					entr.setId((short) i);
-					break;
+					i++;
+					if(!c.contains(i))
+					{
+						ID_NAME_MAP.put(entr.getName(), i);
+						entr.setId((short) i);
+						break;
+					}
 				}
+			}
+			else
+			{
+				entr.setId((short)ID_NAME_MAP.get(entr.getName()).intValue());
 			}
 		}
 	}
@@ -436,12 +447,14 @@ public class CustomRegistry
 		return null;
 	}
 	
-	public static ArrayList<CustomBase> getAllEntries()
+	public static CustomBase[] getAllEntries()
 	{
-		ArrayList<CustomBase> arr = new ArrayList<>();
-		arr.addAll(CUSTOM_BLOCK_REGISTRY);
-		arr.addAll(CUSTOM_GUI_REGISTRY);
-		arr.addAll(CUSTOM_ITEM_REGISTRY);
+		
+		CustomBase[] arr1 = CUSTOM_BLOCK_REGISTRY.toArray(new CustomBase[CUSTOM_BLOCK_REGISTRY.size()]);
+		CustomBase[] arr2 = CUSTOM_GUI_REGISTRY.toArray(new CustomBase[CUSTOM_GUI_REGISTRY.size()]);
+		CustomBase[] arr3 = CUSTOM_ITEM_REGISTRY.toArray(new CustomBase[CUSTOM_ITEM_REGISTRY.size()]);
+		CustomBase[] arr = (CustomBase[]) ArrayUtils.addAll(ArrayUtils.addAll(arr1, arr2), arr3);
+
 		return arr;
 	}
 	
