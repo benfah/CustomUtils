@@ -130,28 +130,31 @@ public class CustomRegistry
 	{
 		for(InformationEntry entr : cb.getModelPathEntry())
 		{
-			if(!ID_NAME_MAP.containsKey(entr.getName()))
+			if(entr.getPathToModel() != null)
 			{
-					
-				
-				
-				Collection<Integer> c = ID_NAME_MAP.values();
-				int i = 0;
-				if(entr.getPathToModel() != null)
-				while(true)
+				if(!ID_NAME_MAP.containsKey(entr.getName()))
 				{
-					i++;
-					if(!c.contains(i))
+						
+					
+					
+					Collection<Integer> c = ID_NAME_MAP.values();
+					int i = 0;
+					if(entr.getPathToModel() != null)
+					while(true)
 					{
-						ID_NAME_MAP.put(entr.getName(), i);
-						entr.setId((short) i);
-						break;
+						i++;
+						if(!c.contains(i))
+						{
+							ID_NAME_MAP.put(entr.getName(), i);
+							entr.setId((short) i);
+							break;
+						}
 					}
 				}
-			}
-			else
-			{
-				entr.setId((short)ID_NAME_MAP.get(entr.getName()).intValue());
+				else
+				{
+					entr.setId((short)ID_NAME_MAP.get(entr.getName()).intValue());
+				}
 			}
 		}
 	}

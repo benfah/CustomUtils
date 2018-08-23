@@ -2,15 +2,15 @@ package me.benfah.cu.util;
 
 public class InformationEntry
 {
-	private short id;
+	private Short id;
 	private String pathToModel;
 	private String name;
 	
-	public short getId()
+	public Short getId()
 	{
 		return id;
 	}
-	public void setId(short id)
+	public void setId(Short id)
 	{
 		this.id = id;
 	}

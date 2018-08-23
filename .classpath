@@ -15,6 +15,7 @@
 		<attributes>
 			<attribute name="optional" value="true"/>
 			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="test" value="true"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
@@ -27,7 +28,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="E:/Spigot 1.8/spigot-1.12.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Benedikt/Downloads/NBTLibrary_v1.0.1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="E:/Spigot GIT2/spigot-1.12.2.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

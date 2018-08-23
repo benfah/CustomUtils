@@ -18,7 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 
-public class BlockInstance implements Block{
+public class BlockInstance implements Block, IBlockInstance{
 	Location loc;
 	static Map<Location, BlockInstance> biMap = new HashMap<>();
 	public BlockInstance(Block b)

@@ -28,7 +28,9 @@ public class BlockBreakListener implements Listener
 		Block b = e.getBlock();
 		if(CustomRegistry.isCustomBlock(b))
 		{
+			
 			CustomBlock cb = CustomRegistry.getCustomBlockByBlock(b);
+			cb.onBlockBroken(e);
 			for(ItemStack i : cb.getLoot(e.getBlock()))
 			{
 				if(i != null && i.getType() != Material.AIR)
@@ -37,7 +39,6 @@ public class BlockBreakListener implements Listener
 			BlockInstance.removeBlockInstance(b);
 			
 			
-			cb.onBlockBroken(e);
 			WorldStore ws = CustomRegistry.getWorldStore(e.getBlock().getWorld());
 			ws.handleBlockBreak(e);
 			

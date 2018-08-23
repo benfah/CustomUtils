@@ -129,12 +129,11 @@ public class CustomGUI extends CustomBase
 			e.printStackTrace();
 		}
 		
-		if(getMainModelPathEntry().getId() != -1)
+		if(getMainModelPathEntry().getId() != null)
 		inv.setItem(0, getUpperStack());
-		if(getSecondModelPathEntry().getId() != -1)
+		if(getSecondModelPathEntry().getId() != null)
 		inv.setItem(inv.getSize() - 9, getLowerStack());
 		
-		inv.setItem(5, new ItemStack(Material.ANVIL));
 		return new CInventory(inv, this);
 		
 		

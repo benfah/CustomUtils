@@ -29,7 +29,6 @@ public class PlayerInteractListener implements Listener
 			{
 				e.setCancelled(true);
 				CustomRegistry.getCustomBlockByBlock(e.getClickedBlock()).onInteract(e);
-				return;
 			}
 		}
 		if(((e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) && e.getHand().equals(EquipmentSlot.HAND)) || (e.getAction() == Action.RIGHT_CLICK_AIR && e.getHand().equals(EquipmentSlot.OFF_HAND)))
