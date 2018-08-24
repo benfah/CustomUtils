@@ -60,9 +60,11 @@ public class MinePackInitializationMethod implements IInitializationMethod
 		initialize = InitializationState.INITIALIZING;
 		try
 		{
-		System.out.println(CustomRegistry.PLUGIN_REGISTRY.size() + " plugins registered.");
-		System.out.println(CustomRegistry.CUSTOM_BLOCK_REGISTRY.size() + " blocks registered.");
-		System.out.println(CustomRegistry.CUSTOM_GUI_REGISTRY.size() + " guis registered.");
+		System.out.println(CustomRegistry.PLUGIN_REGISTRY.size() + " plugin(s) registered.");
+		System.out.println(CustomRegistry.CUSTOM_BLOCK_REGISTRY.size() + " block(s) registered.");
+		System.out.println(CustomRegistry.CUSTOM_GUI_REGISTRY.size() + " gui(s) registered.");
+		System.out.println(CustomRegistry.CUSTOM_ITEM_REGISTRY.size() + " item(s) registered.");
+
 		System.out.println(CustomRegistry.CUSTOM_GUI_REGISTRY.size() + CustomRegistry.CUSTOM_BLOCK_REGISTRY.size() + " in total.");
 		
 		initResourcePack(forceUpload);
